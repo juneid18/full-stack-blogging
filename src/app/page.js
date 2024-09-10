@@ -13,14 +13,18 @@ import { GrBlog } from "react-icons/gr";
 
 export default function Home() {
   const [blogData, setBlogData] = useState([]);
-  const [selectedTag, setSelectedTag] = useState('All')
-  const [subemail, setemail] = useState()
+  const [selectedTag, setSelectedTag] = useState('All');
+  const [subemail, setEmail] = useState('');
 
-  document.addEventListener('DOMContentLoaded', function() {
-    if (childElement && childElement.parentNode) {
-      childElement.parentNode.removeChild(childElement);
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const childElement = document.getElementById('someElement');
+      if (childElement && childElement.parentNode) {
+        childElement.parentNode.removeChild(childElement);
+      }
     }
-  });
+  }, []); 
+
   const getBlogData = async () => {
     try {
       const res = await axios.post("/api/users/blogData");
@@ -35,18 +39,17 @@ export default function Home() {
   }, []);
 
   const filterdBlogTag = selectedTag === 'All' ? blogData : blogData.filter(blog => blog.tag === selectedTag);
-  const Handlesubscribe = () =>{
+
+  const handleSubscribe = () => {
     if (subemail) {
       toast("Subscribed successfully", {
         position: "top-center",
         className: 'foo-bar'
       });
-  
-    }else{
-      toast.error("empty filed")
+    } else {
+      toast.error("Empty field");
     }
-    
-  }
+  };
 
   function createSlug(text) {
     return text
@@ -55,6 +58,7 @@ export default function Home() {
       .replace(/[\s\W-]+/g, '-')    // Replace spaces and non-word characters with hyphens
       .replace(/^-+|-+$/g, '');     // Remove leading and trailing hyphens
   }
+
   return (
     <>
       <div className={styles.main}>
@@ -78,14 +82,17 @@ export default function Home() {
             industry. Lorem Ipsum has been the industrys standard dummy text
             ever.
           </p>
-          <br></br>
-
+          <br />
           <div className={styles.subscription}>
-            <input type="email" onChange={(e)=> setemail(e.target.value)} placeholder="Enter your email" />
-            <button onClick={Handlesubscribe}>Subscribe</button>
+            <input
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+            />
+            <button onClick={handleSubscribe}>Subscribe</button>
           </div>
         </div>
-        <br></br>
+        <br />
         <nav className={styles.categories}>
           <button onClick={() => setSelectedTag('All')} className={styles.active}>All</button>
           <button onClick={() => setSelectedTag('Technology')} className={styles.btn}>Technology</button>
@@ -93,45 +100,43 @@ export default function Home() {
           <button onClick={() => setSelectedTag('Lifestyle')} className={styles.btn}>Lifestyle</button>
           <button onClick={() => setSelectedTag('Education')} className={styles.btn}>Education</button>
         </nav>
-
         <div className={styles.blog_list}>
           {Array.isArray(filterdBlogTag) && filterdBlogTag.map((blog, index) => (
-            <Link key={index} href={`/blog/${createSlug(blog.title)}/${blog._id}`} prefetch={false} 
-            style={{textDecoration:'none', color:'black'}}
-            >
-            <div className={styles.blog_card}>
-              <Image
-                src={blog.image}
-                alt="Blog Image"
-                className={styles.blog_card_image}
-                width={300} // You can specify width and height
-                height={200}
-              />
-              <div className={styles.blog_card_content}>
-                <h2 className={styles.blog_card_title}>{blog.title}</h2>
-                <p className={styles.blog_card_description}>{blog.description}</p>
-                <Link href="#" className={styles.blog_card_link}>Read More <FaArrowRight style={{marginTop:'0.3rem', marginLeft:'6px',position:'absolute'}}/></Link>
-                <br></br>
-                <span className={styles.blog_card_date}>
-              {format(parseISO(blog.publishedAt), "MMM d")}
-            </span>
-              </div>
+            <div key={index} className={styles.blog_card}>
+              <Link href={`/blog/${createSlug(blog.title)}/${blog._id}`} prefetch={false} style={{ textDecoration: 'none', color: 'black' }}>
+                <Image
+                  src={blog.image}
+                  alt="Blog Image"
+                  className={styles.blog_card_image}
+                  width={300}
+                  height={200}
+                />
+                <div className={styles.blog_card_content}>
+                  <h2 className={styles.blog_card_title}>{blog.title}</h2>
+                  <p className={styles.blog_card_description}>{blog.description}</p>
+                  <span className={styles.blog_card_date}>
+                    {format(parseISO(blog.publishedAt), "MMM d")}
+                  </span>
+                </div>
+              </Link>
+              <Link href={`/blog/${createSlug(blog.title)}/${blog._id}`} className={styles.blog_card_link}>
+                Read More <FaArrowRight style={{ marginTop: '0.3rem', marginLeft: '6px', position: 'absolute' }} />
+              </Link>
             </div>
-            </Link>
           ))}
         </div>
       </div>
       <ToastContainer />
       <footer id={styles.footer}>
-    <div className={styles.wrapper}>
-      <small>&copy;2017 <strong id={styles.strong}>Awesome Company</strong>, All Rights Reserved</small>
-      <nav className={styles.footer_nav}>
-        <Link href="#">Back to Top</Link>
-        <Link href="#">Terms of Use</Link>
-        <Link href="#">Privacy</Link>
-      </nav>
-    </div>
-  </footer>
+        <div className={styles.wrapper}>
+          <small>&copy;2017 <strong id={styles.strong}>Awesome Company</strong>, All Rights Reserved</small>
+          <nav className={styles.footer_nav}>
+            <Link href="#">Back to Top</Link>
+            <Link href="#">Terms of Use</Link>
+            <Link href="#">Privacy</Link>
+          </nav>
+        </div>
+      </footer>
     </>
   );
 }

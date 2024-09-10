@@ -1,6 +1,5 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { connect } from "@/dbconfig/dbconfig";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -20,11 +19,9 @@ import {
   PinterestShare,
 } from "react-share-kit";
 
-
-connect();
-
 export default function BlogPage() {
   const [currentUrl, setCurrentUrl] = useState('');
+  const [blogData, setBlogData] = useState(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -32,25 +29,19 @@ export default function BlogPage() {
     }
   }, []);
 
-
   const pathname = usePathname();
-  const [blogData, setblogData] = useState(null);
 
   // Split the pathname to extract the slug and id
   const pathParts = pathname?.split("/");
-  const slug = pathParts?.[2]; // Assuming '/blog/slug/id', slug will be at index 2
-  const id = pathParts?.[3]; // id will be at index 3
+  const slug = pathParts?.[2];
+  const id = pathParts?.[3];
 
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
         try {
-          const responce = await axios.post(
-            "../../../api/users/viewblog",
-            JSON.stringify({ id })
-          );
-          console.log(responce);
-          setblogData(responce.data.data);
+          const response = await axios.post("/api/users/viewblog", { id });
+          setBlogData(response.data.data);
         } catch (error) {
           toast.error(error.message);
         }
@@ -60,12 +51,9 @@ export default function BlogPage() {
     };
     fetchData();
   }, [id]);
-  console.log(blogData);
 
   return (
     <>
-      {/* <h1>Blog Slug: {slug}</h1>
-      <h2>Blog ID: {id}</h2> */}
       <div className={style.container}>
         <div className={style.navbar}>
           <div className={style.logo}>
@@ -74,7 +62,7 @@ export default function BlogPage() {
             </h1>
           </div>
           <div className={style.nav_buttons}>
-            <Link href="/" className={style.createicon} title="Write">
+            <Link href="/createBlog" className={style.createicon} title="Write">
               <IoCreateOutline />
             </Link>
             <Link href="/profile" className={style.profile_button}>
@@ -85,52 +73,39 @@ export default function BlogPage() {
         <h1 id={style.header}>{blogData?.title}</h1>
         <div className={style.meta}>
           <Image
-            src={
-              blogData?.authorImage ||
-              "https://janefriedman.com/wp-content/uploads/2014/09/Example-of-a-Polished-Author-Portrait.png"
-            }
+            src={blogData?.authorImage || "/default-author-image.png"}
             alt="Author Icon"
             width={100}
             height={100}
+            priority
           />
           <div>
-            <p>
-              <b>{blogData?.username}</b>
-            </p>
+            <span>
+              <strong>{blogData?.username}</strong>
+            </span>
             <p>
               {blogData?.publishedAt
                 ? format(parseISO(blogData.publishedAt), "MMMM dd, yyyy")
                 : "Date not available"}
             </p>
-            <p>
-              <FacebookShare
-                url={currentUrl}
-              />
-              <InstapaperShare 
-                 url={currentUrl}
-              />
-              <TwitterShare
-                url={currentUrl}
-              />
-              <WhatsappShare
-                url={currentUrl}
-              />
-              <TelegramShare
-                url={currentUrl}
-              />
-              <PinterestShare
-                url={currentUrl}
-              />
-            </p>
+            <div className={style.socialShares}>
+              <FacebookShare url={currentUrl} />
+              <InstapaperShare url={currentUrl} />
+              <TwitterShare url={currentUrl} />
+              <WhatsappShare url={currentUrl} />
+              <TelegramShare url={currentUrl} />
+              <PinterestShare url={currentUrl} />
+            </div>
           </div>
         </div>
         <div className={style.post_info}></div>
         <div className={style.image}>
           <Image
-            src={blogData?.image}
+            src={blogData?.image || "/default-blog-image.png"}
             alt="Best Technology Blogs"
             width={100}
             height={100}
+            priority
           />
         </div>
         <article id={style.article}>

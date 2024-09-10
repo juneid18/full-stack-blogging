@@ -14,74 +14,76 @@ import Image from "next/image";
 import { IoCreate } from "react-icons/io5";
 
 export default function Profile() {
-  // Using Router to navigate User
   const router = useRouter();
-  // created a state to store user data
-  const [data, setData] = useState("nothing");
-  const [blogData, setblogData] = useState([]);
+  const [data, setData] = useState(null);
+  const [blogData, setBlogData] = useState([]);
 
-  // created a function to Get User Details
 
+  useEffect(() => {
   const GetUserDetail = async () => {
     try {
-      const res = await axios.post("../api/users/me");
-      console.log(res.data.data);
+      const res = await axios.post("/api/users/me");
       setData(res.data.data);
     } catch (error) {
       toast.error(error.message);
     }
   };
+  
+  GetUserDetail();
+}, []);
+
+  useEffect(() => {
   const fetchUserBlog = async () => {
-    try {
-      const userBlogResponce = await axios.post("../api/users/userBlogs", {
-        id: data._id,
-      });
-      setblogData(userBlogResponce.data.data);
-    } catch (error) {
-      toast.error(error.message);
+    if (data?._id) {
+      try {
+        const userBlogResponse = await axios.post("/api/users/userBlogs", {
+          id: data._id,
+        });
+        setBlogData(userBlogResponse.data.data);
+      } catch (error) {
+        toast.error(error.message);
+      }
     }
   };
-  useEffect(() => {
-    GetUserDetail();
-    console.log(blogData);
-  }, []);
+  fetchUserBlog();
+}, [data]);
 
-  useEffect(() => {
-    if (data?._id) {
-      fetchUserBlog();
-    }
-  }, [data]);
 
-  // Hittig the logout api for logout user
+
+ 
+
+
   const logout = async () => {
     try {
-      await axios.get("../api/users/logout");
-      toast.success("LogOut Success");
-      router.push("../login");
+      await axios.get("/api/users/logout");
+      toast.success("Logout Successful");
+      router.push("/login");
     } catch (err) {
-      console.log(err);
-      ("error");
       toast.error(err.message);
     }
   };
-  const sendUserMail = async () => {
-    const res = axios.post("../api/users/sendMail", {
-      email: data.email,
-      emailType: "VERIFY",
-      userId: data._id,
-    });
-    console.log(res);
 
-    toast.success("Verification mail sended!!");
+  const sendUserMail = async () => {
+    try {
+      await axios.post("/api/users/sendMail", {
+        email: data.email,
+        emailType: "VERIFY",
+        userId: data._id,
+      });
+      toast.success("Verification mail sent!");
+    } catch (error) {
+      toast.error("Failed to send verification mail.");
+    }
   };
-  console.log(blogData);
+
   function createSlug(text) {
     return text
-      .toLowerCase() // Convert to lowercase
-      .trim() // Remove leading and trailing spaces
-      .replace(/[\s\W-]+/g, "-") // Replace spaces and non-word characters with hyphens
-      .replace(/^-+|-+$/g, ""); // Remove leading and trailing hyphens
+      .toLowerCase()                // Convert to lowercase
+      .trim()                       // Remove leading and trailing spaces
+      .replace(/[\s\W-]+/g, '-')    // Replace spaces and non-word characters with hyphens
+      .replace(/^-+|-+$/g, '');     // Remove leading and trailing hyphens
   }
+
   return (
     <>
       <div className={styles.navbar}>
@@ -92,7 +94,7 @@ export default function Profile() {
         </div>
         <div className={styles.nav_buttons}>
           <Link href="/createBlog" className={styles.get_started}>
-            Create <IoCreate style={{fontSize:'20px'}}/>
+            Create <IoCreate style={{ fontSize: '20px' }} />
           </Link>
         </div>
       </div>
@@ -100,37 +102,33 @@ export default function Profile() {
         <div className={styles.profile_page}>
           <aside className={styles.sidebar}>
             <div className={styles.user_info}>
-              <h2 title={data.username} className={styles.user_name}>
-                {data.username}{" "}
-                {data.isVerified ? (
+              <h2 title={data?.username} className={styles.user_name}>
+                {data?.username}
+                {data?.isVerified ? (
                   <MdVerified title="Verified" className={styles.verified} />
                 ) : (
                   <>
                     <MdVerified title="Not Verified" className={styles.notVerified} />
-                    <br></br>
-                    <button
-                      onClick={sendUserMail}
-                      className={styles.verifyButton}
-                    >
+                    <br />
+                    <button onClick={sendUserMail} className={styles.verifyButton}>
                       Verify your email
                     </button>
                   </>
                 )}
               </h2>
-
-              <p title={data.email} className={styles.user_email}>{data.email}</p>
+              <p title={data?.email} className={styles.user_email}>{data?.email}</p>
             </div>
             <nav className={styles.nav_menu}>
               <ul>
                 <li>
-                  <span href="#" className={styles.nav_link}>
+                  <button className={styles.nav_link} onClick={() => {/* handle settings */}}>
                     Settings
-                  </span>
+                  </button>
                 </li>
                 <li>
-                  <span onClick={logout} className={styles.nav_link}>
+                  <button onClick={logout} className={styles.nav_link}>
                     Logout
-                  </span>
+                  </button>
                 </li>
               </ul>
             </nav>
@@ -148,25 +146,24 @@ export default function Profile() {
                       key={index}
                       href={`/blog/${createSlug(blog.title)}/${blog._id}`}
                       prefetch={false}
-                      style={{ textDecoration: "none", color: "black" }}
+                      className={styles.blog_card_link}
                     >
-                      <div className={styles.blog_card} >
+                      <div className={styles.blog_card}>
                         <Image
                           src={blog.image}
                           alt="Blog Image"
                           className={styles.blog_card_image}
-                          width={300} // You can specify width and height
+                          width={300}
                           height={200}
+                          priority 
                         />
                         <div className={styles.blog_card_content}>
-                          <h2 className={styles.blog_card_title}>
-                            {blog.title}
-                          </h2>
-                          <p className={styles.blog_card_description}>
-                            {blog.description}
-                          </p>
-                          <Link href="#" className={styles.blog_card_link}>
-                            Read More{" "}
+                          <h2 className={styles.blog_card_title}>{blog.title}</h2>
+                          <p className={styles.blog_card_description}>{blog.description}</p>
+                          <div className={styles.blog_card_footer}>
+                            <span className={styles.blog_card_date}>
+                              {format(parseISO(blog.publishedAt), "MMM d")}
+                            </span>
                             <FaArrowRight
                               style={{
                                 marginTop: "0.3rem",
@@ -174,11 +171,7 @@ export default function Profile() {
                                 position: "relative",
                               }}
                             />
-                          </Link>
-                          <br></br>
-                          <span className={styles.blog_card_date}>
-                            {format(parseISO(blog.publishedAt), "MMM d")}
-                          </span>
+                          </div>
                         </div>
                       </div>
                     </Link>

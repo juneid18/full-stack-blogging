@@ -1,0 +1,334 @@
+/* General Styles */
+.Main_container {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #eaeaea;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .nav_buttons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .get_started {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #333;
+    border: 2px solid #333;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .get_started:hover {
+    background-color: #333;
+    color: #ffffff;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  
+  .profile_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    background-color: #ffffff;
+    border: 2px solid #333;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #333;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .profile_button:hover {
+    background-color: #333;
+    color: #ffffff;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  .profile_page {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar {
+    width: 15%;
+    background-color: #333;
+    color: #fff;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .user_info {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  
+  .user_name {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .user_email {
+    font-size: 1rem;
+    color: #ccc;
+  }
+  
+  .nav_menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav_menu li {
+    margin-bottom: 20px;
+  }
+  
+  .nav_link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .nav_link:hover {
+    color: #ff9800;
+  }
+  
+  .logout_button {
+    background-color: #ff9800;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: auto;
+    align-self: center;
+  }
+  
+  .logout_button:hover {
+    background-color: #e68900;
+  }
+  
+  .content_area {
+    width: 100%;
+    padding: 40px;
+    overflow-y: auto;
+  }
+  
+  .content_header {
+    margin-bottom: 30px;
+  }
+  
+  .content_title {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .posts_section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .post_card {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-basis: calc(33.333% - 20px);
+  }
+  
+  .post_title {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .post_excerpt {
+    font-size: 1rem;
+    color: #777;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .profile_page {
+      flex-direction: column;
+      height: auto;
+    }
+  
+    .sidebar {
+      width: 100%;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  
+    .content_area {
+      width: 100%;
+      padding: 20px;
+    }
+  
+    .posts_section {
+      flex-direction: column;
+    }
+  
+    .post_card {
+      flex-basis: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .user_name {
+      font-size: 1.5rem;
+    }
+  
+    .content_title {
+      font-size: 1.5rem;
+    }
+  
+    .nav_link {
+      font-size: 1rem;
+    }
+  
+    .logout_button {
+      width: 100%;
+      margin-top: 20px;
+      
+    }
+  }
+  .notVerified {
+    color: #f44336  ;
+  }
+.verified{
+    color: #2196f3 ;
+}
+.verifyButton {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #f44336; /* Red background */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .verifyButton:hover {
+    background-color: #e53935; /* Darker red on hover */
+  }
+  /* Blog List */
+.blog_list {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 10px;
+  flex-wrap: wrap;
+}
+
+/* Blog Card Container */
+.blog_card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 350px;
+  margin: 16px;
+  background-color: #fff;
+  background-image: url("https://www.transparenttextures.com/patterns/cubix.png");
+  background-size: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Blog Card Hover Effect */
+.blog_card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Blog Card Image */
+.blog_card_image {
+  width: 100%;
+  height: 180px; /* Adjust as needed */
+  object-fit: cover;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Blog Card Content */
+.blog_card_content {
+  padding: 20px;
+  flex: 1; /* Ensures that the content area expands to fill the available space */
+}
+
+/* Blog Card Title */
+.blog_card_title {
+  font-size: 1.6rem;
+  margin: 0 0 10px;
+  color: #222;
+  font-weight: 600;
+  white-space: nowrap; 
+  width: 300px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+/* Blog Card Description */
+.blog_card_description {
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 20px;
+  line-height: 1.4;
+}
+
+/* Blog Card Link */
+.blog_card_link {
+  display: inline-block;
+  font-size: 1rem;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.blog_card_link:hover {
+  color: #0056b3;
+}
+
+/* Blog Card Date */
+.blog_card_date {
+  font-size: 0.875rem;
+  color: #999;
+  display: block;
+  margin-top: auto; /* Pushes the date to the bottom of the card */
+}

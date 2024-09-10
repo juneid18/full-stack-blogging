@@ -1,0 +1,140 @@
+.container {
+  width: 70%;
+  margin: 0 auto;
+}
+#header {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+}
+.nav_buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Adds space between buttons */
+}
+
+.profile_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4em;
+  height: 40px;
+  font-size: 24px;
+  background-color: white;
+  border: 2px solid #000;
+  border-radius: 6px; /* Makes the button circular */
+  cursor: pointer;
+  color: #000;
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.profile_button i {
+  font-size: 20px;
+  color: black;
+}
+
+.profile_button:hover {
+  background-color: #000;
+  color: white;
+  border: 0;
+}
+
+.logo #h1 {
+  font-size: 24px;
+}
+.createicon{
+    font-size: 30px;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+  color: #999;
+  margin-bottom: 20px;
+}
+.meta img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.meta p {
+  margin: 0;
+}
+.post-info {
+  display: flex;
+  align-items: center;
+}
+.post-info div {
+  margin-right: 20px;
+}
+.post-info svg {
+  width: 20px;
+  height: 20px;
+  fill: #999;
+}
+.image {
+  margin: 20px 0;
+  text-align: center;
+}
+.image img {
+  width: 100%;
+  height: auto;
+}
+#article {
+  font-size: 24px;
+}
+#footer {
+    background: url("http://i.imgur.com/f4jGhSF.png") repeat center;
+    font-family: "Arial", sans-serif;
+    font-size: 0.875rem;
+    height: 8rem;
+    width: 100%;
+    text-align: center;
+    display: table;
+    margin-top: 100px;
+  }
+  
+  .wrapper {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+  #footer small {
+    color: #ccc;
+    letter-spacing: 0.025rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  
+  #footer .footer_nav a {
+    text-decoration: none;
+    color: #c74f78;
+    margin: 0 0.5rem;
+    display: inline-block;
+  }
+  
+  #footer .footer_nav a:hover {
+    color: #f26896;
+    transition: color 0.15s ease-in-out;
+  }
+  
+  #strong {
+    font-weight: 700;
+  }
+  

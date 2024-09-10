@@ -1,95 +1,137 @@
+"use client";
 import Image from "next/image";
 import styles from "./page.module.css";
+import { CgProfile } from "react-icons/cg";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { FaArrowRight } from "react-icons/fa";
+import { format, parseISO } from 'date-fns';
+import { GrBlog } from "react-icons/gr";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [blogData, setBlogData] = useState([]);
+  const [selectedTag, setSelectedTag] = useState('All')
+  const [subemail, setemail] = useState()
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (childElement && childElement.parentNode) {
+      childElement.parentNode.removeChild(childElement);
+    }
+  });
+  const getBlogData = async () => {
+    try {
+      const res = await axios.post("/api/users/blogData");
+      setBlogData(res.data.data);
+    } catch (error) {
+      toast.error("Error fetching blog data");
+    }
+  };
+
+  useEffect(() => {
+    getBlogData();
+  }, []);
+
+  const filterdBlogTag = selectedTag === 'All' ? blogData : blogData.filter(blog => blog.tag === selectedTag);
+  const Handlesubscribe = () =>{
+    if (subemail) {
+      toast("Subscribed successfully", {
+        position: "top-center",
+        className: 'foo-bar'
+      });
+  
+    }else{
+      toast.error("empty filed")
+    }
+    
+  }
+
+  function createSlug(text) {
+    return text
+      .toLowerCase()                // Convert to lowercase
+      .trim()                       // Remove leading and trailing spaces
+      .replace(/[\s\W-]+/g, '-')    // Replace spaces and non-word characters with hyphens
+      .replace(/^-+|-+$/g, '');     // Remove leading and trailing hyphens
+  }
+  return (
+    <>
+      <div className={styles.main}>
+        <div className={styles.navbar}>
+          <div className={styles.logo}>
+            <h1 className={styles.h1}><GrBlog /> Blogger</h1>
+          </div>
+          <div className={styles.nav_buttons}>
+            <Link href="/createBlog" className={styles.get_started}>
+              Get started
+            </Link>
+            <Link href="/profile" className={styles.profile_button}>
+              <CgProfile />
+            </Link>
+          </div>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className={styles.latest_blogs}>
+          <h2 className={styles.header_title}>Latest Blogs</h2>
+          <p className={styles.paragraph}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industrys standard dummy text
+            ever.
+          </p>
+          <br></br>
+
+          <div className={styles.subscription}>
+            <input type="email" onChange={(e)=> setemail(e.target.value)} placeholder="Enter your email" />
+            <button onClick={Handlesubscribe}>Subscribe</button>
+          </div>
+        </div>
+        <br></br>
+        <nav className={styles.categories}>
+          <button onClick={() => setSelectedTag('All')} className={styles.active}>All</button>
+          <button onClick={() => setSelectedTag('Technology')} className={styles.btn}>Technology</button>
+          <button onClick={() => setSelectedTag('Startup')} className={styles.btn}>Startup</button>
+          <button onClick={() => setSelectedTag('Lifestyle')} className={styles.btn}>Lifestyle</button>
+          <button onClick={() => setSelectedTag('Education')} className={styles.btn}>Education</button>
+        </nav>
+
+        <div className={styles.blog_list}>
+          {Array.isArray(filterdBlogTag) && filterdBlogTag.map((blog, index) => (
+            <Link key={index} href={`/blog/${createSlug(blog.title)}/${blog._id}`} prefetch={false} 
+            style={{textDecoration:'none', color:'black'}}
+            >
+            <div className={styles.blog_card}>
+              <Image
+                src={blog.image}
+                alt="Blog Image"
+                className={styles.blog_card_image}
+                width={300} // You can specify width and height
+                height={200}
+              />
+              <div className={styles.blog_card_content}>
+                <h2 className={styles.blog_card_title}>{blog.title}</h2>
+                <p className={styles.blog_card_description}>{blog.description}</p>
+                <Link href="#" className={styles.blog_card_link}>Read More <FaArrowRight style={{marginTop:'0.3rem', marginLeft:'6px',position:'absolute'}}/></Link>
+                <br></br>
+                <span className={styles.blog_card_date}>
+              {format(parseISO(blog.publishedAt), "MMM d")}
+            </span>
+              </div>
+            </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+      <ToastContainer />
+      <footer id={styles.footer}>
+    <div className={styles.wrapper}>
+      <small>&copy;2017 <strong id={styles.strong}>Awesome Company</strong>, All Rights Reserved</small>
+      <nav className={styles.footer_nav}>
+        <Link href="#">Back to Top</Link>
+        <Link href="#">Terms of Use</Link>
+        <Link href="#">Privacy</Link>
+      </nav>
     </div>
+  </footer>
+    </>
   );
 }
